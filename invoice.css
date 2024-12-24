@@ -185,4 +185,15 @@ td {
     .print-button {
         display: none;
     }
+    .signatures {
+        display: block;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px; /* Maintain spacing between the columns */
+      }
+    
+      .signature {
+        flex: 1;
+        min-width: 150px;
+      }
 }

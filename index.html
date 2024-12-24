@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Invoice Generator</title>
+</head>
+<body>
+
+<div class="container">
+  <center><h1 style="color: white;">A.S YARO Invoice Generator</h1></center>
+
+  <div class="column">
+    <div class="shadow-container">
+      <h2>Customer Information</h2>
+      <div class="form-group">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" required>
+      </div>
+      <div class="form-group">
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+      <div class="form-group">
+        <label for="invoiceDate">Invoice Date:</label>
+        <input type="date" id="invoiceDate" name="invoiceDate" required>
+      </div>
+      <div class="form-group">
+        <label for="invoiceNumber">Invoice Number:</label>
+        <input type="text" id="invoiceNumber" name="invoiceNumber" required>
+      </div>
+      <button type="button" onclick="addCustomer()">Add Customer</button>
+    </div>
+  
+    <div class="shadow-container">
+      <h2>Item Information</h2>
+      <div class="form-group">
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+      </div>
+      <div class="form-group">
+        <label for="item">Item:</label>
+        <input type="text" id="item" name="item" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description">
+      </div>
+      <div class="form-group">
+        <label for="unitPrice">Unit Price:</label>
+        <input type="number" id="unitPrice" name="unitPrice" required>
+      </div>
+      <div class="form-group">
+        <label for="discount">Discount (%):</label>
+        <input type="number" id="discount" name="discount" step="0.01" value="0">
+      </div>
+      <div class="form-group">
+        <label for="vat">VAT (%):</label>
+        <input type="number" id="vat" name="vat" step="0.01" value="0">
+      </div>
+      <button type="button" onclick="addItem()">Add Item</button>
+    </div>
+  </div>
+
+  <div class="shadow-container" style="overflow-x:auto;">
+    <h2>Items Added</h2>
+    <table id="itemsTable">
+      <thead>
+        <tr>
+          <th>Quantity</th>
+          <th>Item</th>
+          <th>Description</th>
+          <th>Unit Price</th>
+          <th>Discount (%)</th>
+          <th>VAT (%)</th>
+          <th style="text-align: right;">Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td colspan="6">Grand Total</td>
+          <td id="grandTotal" style="text-align: right;">&#8358; 0.00</td> 
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="shadow-container">
+    <div class="form-group">
+      <label for="amountPaid">Amount Paid:</label>
+      <input type="number" id="amountPaid" name="amountPaid" step="0.01" value="0">
+    </div>
+    <button type="button" onclick="generateInvoice()">Generate Invoice</button>
+  </div>
+</div>
+
+
+<script>
+let customer = {};
+let items = [];
+
+
+function addCustomer() {
+    customer.fullName = document.getElementById("fullName").value;
+    customer.address = document.getElementById("address").value;
+    customer.phone = document.getElementById("phone").value;
+    customer.invoiceDate = document.getElementById("invoiceDate").value;
+    customer.invoiceNumber = document.getElementById("invoiceNumber").value;
+}
+
+
+function addItem() {
+    const quantity = parseFloat(document.getElementById("quantity").value);
+    const item = document.getElementById("item").value;
+    const description = document.getElementById("description").value;
+    const unitPrice = parseFloat(document.getElementById("unitPrice").value);
+    const discountPercentage = parseFloat(document.getElementById("discount").value);
+    const vatPercentage = parseFloat(document.getElementById("vat").value);
+
+
+    const itemTotal = quantity * unitPrice;
+    const discountAmount = (itemTotal * discountPercentage) / 100;
+    const discountedTotal = itemTotal - discountAmount;
+    const vatAmount = (discountedTotal * vatPercentage) / 100;
+    const total = discountedTotal + vatAmount;
+
+
+    const newItem = {
+        quantity,
+        item,
+        description,
+        unitPrice,
+        discount: discountPercentage,
+        vat: vatPercentage,
+        total,
+    };
+
+
+    items.push(newItem);
+    updateItemsTable();
+}
+
+
+function updateItemsTable() {
+    const tableBody = document.getElementById("itemsTable").querySelector("tbody");
+    tableBody.innerHTML = items.map((item, index) => `
+        <tr>
+            <td>${item.quantity}</td>
+            <td>${item.item}</td>
+            <td>${item.description}</td>
+            <td>₦${item.unitPrice.toLocaleString('en-NG', { minimumFractionDigits: 2 })}</td>
+            <td>${item.discount.toFixed(2)}%</td>
+            <td>${item.vat.toFixed(2)}%</td>
+            <td>₦${item.total.toLocaleString('en-NG', { minimumFractionDigits: 2 })}</td>
+            <td><button onclick="removeItem(${index})">Remove</button></td>
+        </tr>
+    `).join('');
+    calculateGrandTotal();
+}
+
+
+function calculateGrandTotal() {
+    const grandTotal = items.reduce((sum, item) => sum + item.total, 0);
+    document.getElementById("grandTotal").innerText = `₦${grandTotal.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+}
+
+
+function removeItem(index) {
+    items.splice(index, 1);
+    updateItemsTable();
+}
+
+function formatNumber(number) {
+    return number.toLocaleString('en-NG', { 
+      minimumFractionDigits: 2, 
+      maximumFractionDigits: 2,
+      style: 'currency',
+      currency: 'NGN' 
+    });
+  }
+
+function generateInvoice() {
+    const grandTotal = items.reduce((sum, item) => sum + item.total, 0);
+    const amountPaid = parseFloat(document.getElementById("amountPaid").value);
+    const balance = grandTotal - amountPaid;
+
+        const invoiceHTML = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link rel="stylesheet" href="invoice.css">
+          <title>Invoice</title>
+        </head>
+        <body>
+          <div class="container" style="height: auto">
+            <div class="header">
+              <div class="logo">
+                <img src="logo.png" alt="Company Logo">
+              </div>
+              <div class="company-info">
+                <h2><strong style="color: #0c4786">A.S YARO TECHNOLOGY</strong></h2>
+                <p>No.1 Gadan Kaya, Aminu Kano Way, Gwale LG, Kano State.</p>
+                <p>Total Communication, Electronics,CCTV,<br> Solar and Inverter System, DStv,GOtv.</p>
+                <p>Phone: 08140244774</p>
+                <p>Email: asyarotechnology@gmail.com</p>
+              </div>
+            </div>
+            <hr>
+            <h2><strong>Invoice Number:</strong> ${customer.invoiceNumber}</h2>
+            <div class="invoice-info">
+              <p><strong>Name:</strong> ${customer.fullName}</p>
+              <p><strong>Address:</strong> ${customer.address}</p>
+              <p><strong>Date:</strong> ${customer.invoiceDate}</p>
+            </div>
+            <div style="overflow-x:auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Quantity</th>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Unit Price</th>
+                    <th>Discount (%)</th>
+                    <th>VAT (%)</th>
+                    <th style="text-align: right;">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map(item => `
+                    <tr>
+                      <td>${item.quantity}</td>
+                      <td>${item.item}</td>
+                      <td>${item.description}</td>
+                      <td style="text-align: right;"> ${formatNumber(item.unitPrice)}</td>
+                      <td>${item.discount.toFixed(2)}</td>
+                      <td>${item.vat.toFixed(2)}</td>
+                      <td style="text-align: right;"> ${formatNumber(item.total)}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+            <div class="totals">
+              <p><strong>Grand Total:</strong> ${formatNumber(grandTotal)}</p>
+              <p><strong>Amount Paid:</strong> ${formatNumber(amountPaid)}</p>
+              <p><strong>Balance:</strong>; ${formatNumber(balance)}</p>
+            </div>
+            <div class="signatures">
+              <div style="float: left;">
+                <p><strong>Authorized Signatory:</strong></p>
+                <p>A.S YARO</p> 
+              </div>
+              <div style="float: right;">
+                <p><strong>Customer Signature:</strong></p>
+                <p style="border-bottom: 1px solid #ccc; height: 30px;"></p> 
+              </div>
+            </div>
+          </div> 
+          <button class="print-button" onclick="window.print()">Print</button>
+        </body>
+        </html>
+        `;
+
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(invoiceHTML);
+        newWindow.document.close();
+    }
+</script>
+
+</body>
+</html>

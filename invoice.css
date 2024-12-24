@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header img {
+    max-width: 120px;
+    height: auto;
+}
+
+.header .company-info h2{
+    text-align: left;
+}
+
+.header .company-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+h2 {
+    text-align: center;
+    color: #444;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.invoice-info {
+    margin-bottom: 20px;
+}
+
+.invoice-info p {
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+    font-size: 14px;
+}
+
+td {
+    font-size: 14px;
+    text-align: left;
+}
+
+.totals {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.totals p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.print-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.print-button:hover {
+    background-color: #0056b3;
+}
+.signatures {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px; /* Adds spacing between the two sections */
+    margin-top: 20px;
+  }
+  
+  .signature {
+    flex: 1; /* Ensures equal width columns */
+    min-width: 150px; /* Prevents the columns from becoming too narrow */
+  }
+  
+  .signature p {
+    margin: 5px 0;
+  }
+  
+  @media (max-width: 768px) {
+    .signatures {
+      flex-direction: column; /* Stacks the divs on smaller screens */
+      align-items: center; /* Centers the content for better appearance */
+    }
+  
+    .signature {
+      text-align: center; /* Centers the text in each column */
+    }
+  }
+  
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header .company-info {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    table th, table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .totals p {
+        font-size: 14px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background-color: white;
+        color: #000;
+    }
+
+    .container {
+        max-width: 100%;
+        box-shadow: none;
+        padding: 0;
+        border: none;
+    }
+
+    .header {
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header .company-info {
+        text-align: left !important;
+    }
+
+    table th, table td {
+        font-size: 14px !important;
+        padding: 10px;
+    }
+
+    .print-button {
+        display: none;
+    }
+}

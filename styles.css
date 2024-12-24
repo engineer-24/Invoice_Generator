@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
+  background-color:#007bff
+}
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+.column {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* Ensures responsiveness for smaller screens */
+  max-width: 1200px;
+  margin: auto;
+}
+
+.shadow-container {
+  flex: 1; /* Ensures equal width columns */
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  min-width: 300px; /* Prevents columns from being too narrow */
+  margin-bottom: 20px;
+}
+.shadow-container h2 {
+  font-size: 20px;
+  color: #007bff;
+  margin-bottom: 15px;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #666;
+}
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease; /* Smooth transition */
+}
+.form-group input:hover {
+  border-color: #007bff;
+}
+button {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+@media (max-width: 768px) {
+  .shadow-container {
+    flex: 1 1 100%; /* Stacks columns on smaller screens */
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f4f4f4;
+}
+.total-row {
+  font-weight: bold;
+}
